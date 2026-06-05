@@ -1,0 +1,13 @@
+[Unit]
+Description=Linux Tab text expander
+After=graphical-session.target
+
+[Service]
+Type=simple
+Environment=TEXT_EXPANDER_CONFIG=%h/.config/linux-tab-text-expander/replacements.json
+ExecStart=%h/.local/bin/linux-tab-text-expander
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target
