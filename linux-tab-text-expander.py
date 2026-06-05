@@ -29,7 +29,6 @@ active_typed = ""
 target_window = None
 lock = threading.Lock()
 ui_events = queue.Queue()
-tab_events = queue.Queue()
 
 
 def load_replacements():
@@ -121,9 +120,7 @@ def expand(shortcut, typed, window_id):
         activate_window(window_id)
         time.sleep(0.03)
         if not is_terminal_window(window_id):
-            # Remove the typed trigger plus a possible literal Tab accepted by the
-            # target before the X11 grab handled it.
-            for _ in range(len(typed) + 1):
+            for _ in range(len(typed)):
                 run(["xdotool", "key", "BackSpace"])
                 time.sleep(0.01)
 
@@ -158,12 +155,10 @@ def match_shortcut():
 
 def request_hint(shortcut):
     ui_events.put(("show", shortcut))
-    tab_events.put(("grab", None))
 
 
 def request_hide_hint():
     ui_events.put(("hide", None))
-    tab_events.put(("ungrab", None))
 
 
 def accept_active_shortcut():
@@ -206,11 +201,17 @@ def on_press(key):
             request_hide_hint()
         return
 
-    if key == keyboard.Key.tab and active_shortcut:
-        accept_active_shortcut()
+    if key == keyboard.Key.tab:
+        if active_shortcut:
+            return
+        reset_buffer()
+        active_shortcut = None
+        active_typed = ""
+        target_window = None
+        request_hide_hint()
         return
 
-    if key in (keyboard.Key.space, keyboard.Key.tab):
+    if key == keyboard.Key.space:
         reset_buffer()
         active_shortcut = None
         active_typed = ""
@@ -310,35 +311,23 @@ def tab_grabber_loop():
     d = display.Display()
     root = d.screen().root
     tab_keycode = d.keysym_to_keycode(XK.string_to_keysym("Tab"))
-    grabbed = False
 
     def grab_tab():
-        nonlocal grabbed
-        if grabbed:
-            return
         root.grab_key(tab_keycode, X.AnyModifier, False, X.GrabModeAsync, X.GrabModeAsync)
         d.flush()
-        grabbed = True
 
     def ungrab_tab():
-        nonlocal grabbed
-        if not grabbed:
-            return
         root.ungrab_key(tab_keycode, X.AnyModifier)
         d.flush()
-        grabbed = False
+
+    def replay_tab():
+        ungrab_tab()
+        run(["xdotool", "key", "--clearmodifiers", "Tab"])
+        grab_tab()
+
+    grab_tab()
 
     while True:
-        while True:
-            try:
-                action, _ = tab_events.get_nowait()
-            except queue.Empty:
-                break
-            if action == "grab":
-                grab_tab()
-            else:
-                ungrab_tab()
-
         readable, _, _ = select.select([d.fileno()], [], [], 0.05)
         if not readable:
             continue
@@ -347,8 +336,8 @@ def tab_grabber_loop():
             event = d.next_event()
             if event.type != X.KeyPress or event.detail != tab_keycode:
                 continue
-            if accept_active_shortcut():
-                ungrab_tab()
+            if not accept_active_shortcut():
+                replay_tab()
 
 
 def main():

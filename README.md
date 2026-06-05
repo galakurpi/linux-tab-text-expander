@@ -2,7 +2,7 @@
 
 A small X11 text replacement daemon for Ubuntu / Pop!_OS. It watches typed shortcuts, shows a small hint when a shortcut is ready or when 3+ characters match a shortcut prefix, and expands the prompt when you press `Tab`.
 
-`Tab` is only intercepted while the hint is visible. If you just type a shortcut and keep typing, nothing is pasted. This avoids sending `Tab` into Codex, Claude, terminals, Google inputs, or other apps unless an expansion is actively being accepted.
+The daemon grabs `Tab` at X11 level and immediately replays it normally unless a shortcut is active. If you just type a shortcut and keep typing, nothing is pasted. This avoids sending `Tab` into Codex, Claude, terminals, Google inputs, or other apps when an expansion is actively being accepted.
 
 ## Install
 
@@ -61,7 +61,7 @@ systemctl --user restart linux-tab-text-expander
 
 ## Terminal Notes
 
-Terminal apps need special handling because `Tab` often means "submit", "queue", or "complete". This daemon grabs `Tab` at X11 level only while a hint is active, clears the typed trigger, and types the expansion directly into the terminal.
+Terminal apps need special handling because `Tab` often means "submit", "queue", or "complete". This daemon consumes `Tab` at X11 level when a shortcut is active, clears the typed trigger, and types the expansion directly into the terminal.
 
 If a terminal leaves one character from the trigger behind, set `TEXT_EXPANDER_TERMINAL_EXTRA_BACKSPACES=2` in the systemd service and restart it.
 
