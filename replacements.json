@@ -32,7 +32,7 @@
   {
     "shortcut": "ship",
     "label": "Implement and ship code",
-    "expansion": "Take all the time you need to understand the requirements, read code, documentation, find patterns in other projects, etc. Implement the change end to end. Keep it scoped, follow existing patterns, run the relevant tests/build/lint, verify the real behavior actually end to end and in the closest way possible to reality, browser harness if it includes frontend changes. Update docs/memory only if durable, and leave a concise summary with evidence."
+    "expansion": "Take all the time you need to understand the requirements, read code, documentation, find patterns in other projects, etc. Implement the change end to end. Keep it scoped, follow existing patterns, push to main and deploy to production, once in production, run the relevant tests/build/lint, verify the real behavior actually end to end and in the closest way possible to reality, browser harness if it includes frontend changes, iterate until it works perfect. Update docs/memory only if durable, and leave a concise summary with evidence."
   },
   {
     "shortcut": "absorb",
