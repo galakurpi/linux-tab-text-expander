@@ -57,7 +57,7 @@ systemctl --user restart linux-tab-text-expander
 | `ship` | Implement and ship code | Take all the time you need to understand the requirements, read code, documentation, find patterns in other projects, etc. Implement the change end to end. Keep it scoped, follow existing patterns, push to main and deploy to production, once in production, run the relevant tests/build/lint, verify the real behavior actually end to end and in the closest way possible to reality, browser harness if it includes frontend changes, iterate until it works perfect. Update docs/memory only if durable, and leave a concise summary with evidence. |
 | `absorb` | Absorb the code | Absorb this code deeply, truly understand how it works. Soak in the code and the features. |
 | `jr` | Junior developer instruction | Actually imagine you're writing an instruction message for a junior developer to go work on this. Write something extremely clear and specific, including what files to look at for the change and what ones need to be fixed. |
-| `spawn` | Spawn parallel agents | Spawn multiple agents in parallel - as many as you need to accomplish this task better and faster. Break the work into independent pieces, dispatch them concurrently, and synthesize the results when they return. |
+| `spawn` | Spawn parallel agents | Spawn multiple agents in parallel - as many as you need to accomplish this task better and faster. Break the work into independent pieces, dispatch them concurrently, and synthesize the results when they return. Don't execute yet, show me a diagram of steps to take and what agent does each, and make sure that the logic is right so we don't mess it up with agents missing information etc, no logic fails in the diagram etc. |
 
 ## Terminal Notes
 

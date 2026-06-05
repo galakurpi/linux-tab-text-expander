@@ -47,6 +47,6 @@
   {
     "shortcut": "spawn",
     "label": "Spawn parallel agents",
-    "expansion": "Spawn multiple agents in parallel - as many as you need to accomplish this task better and faster. Break the work into independent pieces, dispatch them concurrently, and synthesize the results when they return."
+    "expansion": "Spawn multiple agents in parallel - as many as you need to accomplish this task better and faster. Break the work into independent pieces, dispatch them concurrently, and synthesize the results when they return. Don't execute yet, show me a diagram of steps to take and what agent does each, and make sure that the logic is right so we don't mess it up with agents missing information etc, no logic fails in the diagram etc."
   }
 ]
