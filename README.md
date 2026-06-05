@@ -28,7 +28,7 @@ Type a trigger, wait for the hint, then press `Tab`.
 
 Example: type `jr`, then press `Tab` to paste the junior-dev instruction prompt.
 
-For longer triggers, hints also appear on partial matches after 3 typed characters. Example: `spa` shows the `spawn` hint, and pressing `Tab` expands the full `spawn` prompt.
+For longer triggers, hints also appear on partial matches after 3 typed characters. Example: `bug` shows the `bug` hint, `spa` shows the `spawn` hint, and pressing `Tab` expands the prompt.
 
 ## Edit Triggers
 
@@ -48,13 +48,13 @@ systemctl --user restart linux-tab-text-expander
 
 | Trigger | Label | Expansion |
 | --- | --- | --- |
-| `;bug` | Fix a bug end to end | Reproduce the exact issue, then create a regression test. Then read all the code and logs that you need to read to pinpoint the exact issue precisely. Then make the smallest safe fix and actually test end to end if it is fixed. Iterate on this. Testing and checking and debugging until it works perfect. Once it does, add necessary documentation, follow karpathy skill. |
-| `;qa` | Browser dogfood QA | Use browser-harness/dogfood QA for this. Test the real user flow end to end with the project test account or documented credentials, capture screenshots/evidence, fix any scoped issues you find, then re-test until the flow works. Also when all finished and tested run a subagent with the autoreview skill to check the diffs, wait for it, apply the highest gains it finds, if it finds any being worth it. |
-| `;skill` | Use the right skill | Use the relevant YekarOS skill for this task. Read its SKILL.md first, follow its workflow, use its scripts/assets if present, and say briefly which skill you used and why. |
-| `;bloat` | Avoid bloat | Before adding anything, check for existing code/docs/data that already do this. Prefer reusing or simplifying existing paths, remove duplication if it is safely in scope, and avoid adding parallel systems. |
-| `;thorough` | Manual thorough check | Be thorough here. Do not sample if the task requires exhaustive checking. Read the relevant rows/files/items yourself, track what range you covered, list suspicious cases, and continue in batches until the whole scope is checked. |
-| `;explain` | Explain for a junior dev | Explain this in plain language for a junior dev and be concise. No long background unless it changes the decision. |
-| `;ship` | Implement and ship code | Take all the time you need to understand the requirements, read code, documentation, find patterns in other projects, etc. Implement the change end to end. Keep it scoped, follow existing patterns, run the relevant tests/build/lint, verify the real behavior actually end to end and in the closest way possible to reality, browser harness if it includes frontend changes. Update docs/memory only if durable, and leave a concise summary with evidence. |
+| `bug` | Fix a bug end to end | Reproduce the exact issue, then create a regression test. Then read all the code and logs that you need to read to pinpoint the exact issue precisely. Then make the smallest safe fix and actually test end to end if it is fixed. Iterate on this. Testing and checking and debugging until it works perfect. Once it does, add necessary documentation, follow karpathy skill. |
+| `qa` | Browser dogfood QA | Use browser-harness/dogfood QA for this. Test the real user flow end to end with the project test account or documented credentials, capture screenshots/evidence, fix any scoped issues you find, then re-test until the flow works. Also when all finished and tested run a subagent with the autoreview skill to check the diffs, wait for it, apply the highest gains it finds, if it finds any being worth it. |
+| `skill` | Use the right skill | Use the relevant YekarOS skill for this task. Read its SKILL.md first, follow its workflow, use its scripts/assets if present, and say briefly which skill you used and why. |
+| `bloat` | Avoid bloat | Before adding anything, check for existing code/docs/data that already do this. Prefer reusing or simplifying existing paths, remove duplication if it is safely in scope, and avoid adding parallel systems. |
+| `thorough` | Manual thorough check | Be thorough here. Do not sample if the task requires exhaustive checking. Read the relevant rows/files/items yourself, track what range you covered, list suspicious cases, and continue in batches until the whole scope is checked. |
+| `explain` | Explain for a junior dev | Explain this in plain language for a junior dev and be concise. No long background unless it changes the decision. |
+| `ship` | Implement and ship code | Take all the time you need to understand the requirements, read code, documentation, find patterns in other projects, etc. Implement the change end to end. Keep it scoped, follow existing patterns, run the relevant tests/build/lint, verify the real behavior actually end to end and in the closest way possible to reality, browser harness if it includes frontend changes. Update docs/memory only if durable, and leave a concise summary with evidence. |
 | `absorb` | Absorb the code | Absorb this code deeply, truly understand how it works. Soak in the code and the features. |
 | `jr` | Junior developer instruction | Actually imagine you're writing an instruction message for a junior developer to go work on this. Write something extremely clear and specific, including what files to look at for the change and what ones need to be fixed. |
 | `spawn` | Spawn parallel agents | Spawn multiple agents in parallel - as many as you need to accomplish this task better and faster. Break the work into independent pieces, dispatch them concurrently, and synthesize the results when they return. |
