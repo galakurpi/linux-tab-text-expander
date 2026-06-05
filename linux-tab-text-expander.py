@@ -28,6 +28,11 @@ active_shortcut = None
 active_typed = ""
 target_window = None
 lock = threading.Lock()
+tab_grab_lock = threading.Lock()
+tab_grab_display = None
+tab_grab_root = None
+tab_grab_keycode = None
+tab_grabbed = False
 ui_events = queue.Queue()
 
 
@@ -48,6 +53,39 @@ def run(args, *, input_text=None):
         stderr=subprocess.DEVNULL,
         check=False,
     )
+
+
+def init_tab_grab():
+    global tab_grab_display, tab_grab_root, tab_grab_keycode
+    tab_grab_display = display.Display()
+    tab_grab_root = tab_grab_display.screen().root
+    tab_grab_keycode = tab_grab_display.keysym_to_keycode(XK.string_to_keysym("Tab"))
+
+
+def grab_tab():
+    global tab_grabbed
+    with tab_grab_lock:
+        if tab_grabbed:
+            return
+        tab_grab_root.grab_key(
+            tab_grab_keycode,
+            X.AnyModifier,
+            False,
+            X.GrabModeAsync,
+            X.GrabModeAsync,
+        )
+        tab_grab_display.flush()
+        tab_grabbed = True
+
+
+def ungrab_tab():
+    global tab_grabbed
+    with tab_grab_lock:
+        if not tab_grabbed:
+            return
+        tab_grab_root.ungrab_key(tab_grab_keycode, X.AnyModifier)
+        tab_grab_display.flush()
+        tab_grabbed = False
 
 
 def active_window_id():
@@ -154,10 +192,12 @@ def match_shortcut():
 
 
 def request_hint(shortcut):
+    grab_tab()
     ui_events.put(("show", shortcut))
 
 
 def request_hide_hint():
+    ungrab_tab()
     ui_events.put(("hide", None))
 
 
@@ -308,39 +348,20 @@ def pump_ui(root, hint):
 
 
 def tab_grabber_loop():
-    d = display.Display()
-    root = d.screen().root
-    tab_keycode = d.keysym_to_keycode(XK.string_to_keysym("Tab"))
-
-    def grab_tab():
-        root.grab_key(tab_keycode, X.AnyModifier, False, X.GrabModeAsync, X.GrabModeAsync)
-        d.flush()
-
-    def ungrab_tab():
-        root.ungrab_key(tab_keycode, X.AnyModifier)
-        d.flush()
-
-    def replay_tab():
-        ungrab_tab()
-        run(["xdotool", "key", "--clearmodifiers", "Tab"])
-        grab_tab()
-
-    grab_tab()
-
     while True:
-        readable, _, _ = select.select([d.fileno()], [], [], 0.05)
+        readable, _, _ = select.select([tab_grab_display.fileno()], [], [], 0.05)
         if not readable:
             continue
 
-        while d.pending_events():
-            event = d.next_event()
-            if event.type != X.KeyPress or event.detail != tab_keycode:
+        while tab_grab_display.pending_events():
+            event = tab_grab_display.next_event()
+            if event.type != X.KeyPress or event.detail != tab_grab_keycode:
                 continue
-            if not accept_active_shortcut():
-                replay_tab()
+            accept_active_shortcut()
 
 
 def main():
+    init_tab_grab()
     root = tk.Tk()
     root.withdraw()
     hint = HintWindow(root)

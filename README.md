@@ -2,7 +2,7 @@
 
 A small X11 text replacement daemon for Ubuntu / Pop!_OS. It watches typed shortcuts, shows a small hint when a shortcut is ready or when 3+ characters match a shortcut prefix, and expands the prompt when you press `Tab`.
 
-The daemon grabs `Tab` at X11 level and immediately replays it normally unless a shortcut is active. If you just type a shortcut and keep typing, nothing is pasted. This avoids sending `Tab` into Codex, Claude, terminals, Google inputs, or other apps when an expansion is actively being accepted.
+`Tab` works normally unless a hint is visible. When a shortcut is active, the daemon grabs `Tab` at X11 level, clears the typed trigger, and inserts the expansion. If you just type a shortcut and keep typing, nothing is pasted.
 
 ## Install
 
